@@ -1,0 +1,22 @@
+# Name is kept the same as your current worker so the workers.dev URL does not change.
+name = "ctgmovies-api"
+main = "src/index.js"
+compatibility_date = "2024-11-01"
+
+# Run the scraper every 6 hours (UTC)
+[triggers]
+crons = ["0 */6 * * *"]
+
+# 1) Create a D1 database named "ctgmovies" in the Cloudflare dashboard
+# 2) Paste its ID below
+[[d1_databases]]
+binding = "DB"
+database_name = "ctgmovies"
+database_id = "PASTE_YOUR_D1_DATABASE_ID_HERE"
+
+[vars]
+SCRAPE_PAGES = "2"   # listing pages checked per section on every run
+MAX_DETAIL = "25"    # max detail pages fetched per run (keeps within Cloudflare limits)
+
+[observability]
+enabled = true
