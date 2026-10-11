@@ -1,0 +1,27 @@
+name: Import data to Cloudflare
+
+# Runs when you push a new data.json.gz (made by scraper.js on your PC),
+# or when you press "Run workflow" manually.
+on:
+  push:
+    branches: [main]
+    paths:
+      - "data.json.gz"
+  workflow_dispatch:
+
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Upload movies to Cloudflare D1
+        run: node scripts/import-to-worker.js
+        env:
+          WORKER_URL: ${{ secrets.WORKER_URL }}
+          ADMIN_TOKEN: ${{ secrets.ADMIN_TOKEN }}
